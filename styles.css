@@ -143,7 +143,7 @@ p {
 
 h1 {
   margin-bottom: 0;
-  font-size: clamp(2.35rem, 5vw, 5.6rem);
+  font-size: clamp(1.8rem, 5vw, 5.6rem);
   line-height: 0.95;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -346,7 +346,7 @@ button:disabled {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .stat-card {
@@ -426,6 +426,19 @@ button:disabled {
 .table-wrap {
   width: 100%;
   overflow-x: auto;
+}
+
+.round-label-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.row-edit-btn {
+  width: 100%;
+  padding: 4px 8px !important;
+  font-size: 0.65rem !important;
 }
 
 table {
@@ -716,51 +729,182 @@ tfoot td,
   gap: 10px;
 }
 
+.round-input-list {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.round-input-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.round-input-field.player-out {
+  opacity: 0.5;
+  background: rgba(88, 19, 19, 0.1);
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.player-info strong {
+  color: var(--gold-strong);
+  font-size: 1rem;
+}
+
+.player-info span {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.round-input-field input {
+  width: 80px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
 @media (max-width: 900px) {
   .app-shell {
-    padding: 16px;
-  }
-
-  .dashboard-grid,
-  .config-grid,
-  .stat-row {
-    grid-template-columns: 1fr;
+    padding: 12px;
   }
 
   .brand-strip {
-    margin-bottom: 22px;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
   }
 
-  .score-header,
-  .players-header,
-  .table-toolbar {
-    align-items: stretch;
-    flex-direction: column;
+  .chip-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  h1 {
+    font-size: 2.2rem !important;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .config-grid,
+  .stat-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .stat-card {
+    padding: 8px 12px;
+  }
+
+  .stat-card strong {
+    font-size: 1.1rem;
+  }
+
+  .score-header {
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+
+  .score-header .eyebrow {
+    display: none;
   }
 
   .header-actions {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .table-actions,
-  .modal-actions {
-    align-items: stretch;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
 
   .header-actions > button {
-    width: 100%;
+    padding: 0 10px;
+    font-size: 0.75rem;
+    min-height: 38px;
   }
 
-  .table-actions > button,
-  .modal-actions > button {
-    width: 100%;
+  #newTableBtn {
+    grid-column: span 2;
+  }
+
+  .table-toolbar {
+    padding: 12px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .table-title {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .table-title .eyebrow {
+    display: none;
+  }
+
+  .table-title h2 {
+    font-size: 1rem;
+  }
+
+  .table-actions {
+    flex: 0 0 100%;
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .table-actions button {
+    min-height: 36px;
+    font-size: 0.7rem;
+    padding: 0 8px;
+  }
+
+  th, td {
+    padding: 8px;
+    min-width: 110px;
+  }
+
+  th:first-child, td:first-child {
+    min-width: 90px;
+    font-size: 0.8rem;
+  }
+
+  .player-name {
+    font-size: 0.85rem;
+  }
+
+  .tiny-button {
+    min-height: 30px;
+    padding: 0 6px;
+  }
+
+  .score-value {
+    font-size: 0.95rem;
+  }
+
+  .modal-card {
+    padding: 16px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 8px;
   }
 
   .split-row,
-  .split-head,
   .checkout-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 100px;
   }
 }

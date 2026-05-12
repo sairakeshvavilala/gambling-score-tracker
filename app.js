@@ -216,8 +216,9 @@ function renderTables() {
   endGameButton.disabled = table.isEnded;
 
   addRowButton.addEventListener("click", () => {
-    table.rows.push(makeGameRow(table.rows.length + 1));
-    renderTables();
+    const newRow = makeGameRow(table.rows.length + 1);
+    table.rows.push(newRow);
+    showRoundModal(table, newRow);
   });
 
   endGameButton.addEventListener("click", () => showEndGameModal(table));
@@ -346,7 +347,19 @@ function buildHistoryRow(table, historyRow) {
 
 function buildGameRow(table, row) {
   const tr = document.createElement("tr");
-  tr.append(makeCell("td", row.label));
+  const labelCell = makeCell("td");
+  labelCell.className = "round-label-cell";
+  
+  const labelText = document.createElement("span");
+  labelText.textContent = row.label;
+  labelCell.append(labelText);
+
+  if (!table.isEnded) {
+    const editBtn = makeActionButton("Edit", "row-edit-btn", () => showRoundModal(table, row));
+    labelCell.append(editBtn);
+  }
+  
+  tr.append(labelCell);
 
   row.scores.forEach((score, playerIndex) => {
     const td = makeCell("td");
@@ -360,64 +373,13 @@ function buildGameRow(table, row) {
 
 function buildScoreCell(table, row, playerIndex, score) {
   const wrapper = document.createElement("div");
-  wrapper.className = "cell-editor";
-  const player = table.players[playerIndex];
-  const total = getPlayerTotal(table, playerIndex);
-  const totalWithoutCell = getPlayerTotalWithoutRow(table, row, playerIndex);
-  const canEdit =
-    !table.isEnded && !player.isOut && total < state.config.totalScore && totalWithoutCell < state.config.totalScore;
-  const isEditing =
-    canEdit && table.editingCell?.rowId === row.id && table.editingCell?.playerIndex === playerIndex;
-
-  if (isEditing) {
-    const input = document.createElement("input");
-    input.className = "score-input";
-    input.type = "text";
-    input.inputMode = "numeric";
-    input.pattern = "[0-9]*";
-    input.value = score;
-    input.addEventListener("input", () => {
-      input.value = input.value.replace(/\D/g, "");
-      // if (totalWithoutCell + Number(input.value || 0) > state.config.totalScore) {
-      //   input.value = "0";
-      // } comented as total player score can cross state.config.totalScore. but can have below logic 
-      if (Number(input.value || 0) > 80) {
-        input.value = "0";
-      }
-    });
-
-    const save = makeActionButton("Save", "", () => {
-      row.scores[playerIndex] = normalizeScoreForTotal(table, row, playerIndex, input.value);
-      table.editingCell = null;
-      settleTableForSingleWinner(table);
-      if (!table.isEnded) {
-        renderTables();
-      }
-    });
-
-    input.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") save.click();
-    });
-    wrapper.append(input, save);
-    setTimeout(() => input.focus(), 0);
-    return wrapper;
-  }
-
+  wrapper.className = "cell-display";
+  
   const value = document.createElement("span");
   value.className = "score-value";
   value.textContent = score;
   wrapper.append(value);
 
-  if (!canEdit) {
-    return wrapper;
-  }
-
-  const edit = makeActionButton("Edit", "", () => {
-    table.editingCell = { rowId: row.id, playerIndex };
-    renderTables();
-  });
-  edit.title = "Edit score";
-  wrapper.append(edit);
   return wrapper;
 }
 
@@ -428,6 +390,77 @@ function makeActionButton(label, variant, onClick) {
   button.textContent = label;
   button.addEventListener("click", onClick);
   return button;
+}
+
+function showRoundModal(table, row) {
+  const content = document.createElement("div");
+  content.className = "modal-card";
+
+  const title = document.createElement("h2");
+  title.textContent = `Edit ${row.label}`;
+  const note = document.createElement("p");
+  note.className = "modal-note";
+  note.textContent = "Enter scores for all active players in this round.";
+
+  const inputList = document.createElement("div");
+  inputList.className = "round-input-list";
+  
+  table.players.forEach((player, playerIndex) => {
+    const totalWithoutRow = getPlayerTotalWithoutRow(table, row, playerIndex);
+    const isOut = player.isOut || totalWithoutRow >= state.config.totalScore;
+    
+    const field = document.createElement("div");
+    field.className = `round-input-field ${isOut ? "player-out" : ""}`;
+    
+    const info = document.createElement("div");
+    info.className = "player-info";
+    info.innerHTML = `<strong>${player.name}</strong><span>Total: ${totalWithoutRow}</span>`;
+    
+    const input = document.createElement("input");
+    input.type = "text";
+    input.inputMode = "numeric";
+    input.pattern = "[0-9]*";
+    input.placeholder = isOut ? "OUT" : "0";
+    input.value = isOut ? "" : (row.scores[playerIndex] || "");
+    input.disabled = isOut;
+    input.dataset.playerIndex = String(playerIndex);
+    
+    input.addEventListener("input", () => {
+      input.value = input.value.replace(/\D/g, "");
+      if (Number(input.value || 0) > 80) {
+        input.value = "0";
+      }
+    });
+
+    field.append(info, input);
+    inputList.append(field);
+  });
+
+  const actions = document.createElement("div");
+  actions.className = "modal-actions";
+  actions.append(
+    makeModalButton("Cancel", "ghost-button", () => {
+      // If it's a new row with no scores yet, we might want to keep it or remove it?
+      // For now, just close. User can edit later.
+      closeModal();
+      renderTables();
+    }),
+    makeModalButton("Save Scores", "primary-button compact", () => {
+      inputList.querySelectorAll("input").forEach((input) => {
+        if (!input.disabled) {
+          const playerIndex = Number(input.dataset.playerIndex);
+          row.scores[playerIndex] = normalizeScoreForTotal(table, row, playerIndex, input.value || "0");
+        }
+      });
+      
+      closeModal();
+      settleTableForSingleWinner(table);
+      renderTables();
+    })
+  );
+
+  content.append(title, note, inputList, actions);
+  openModal(content);
 }
 
 function makeCell(tag, text = "", className = "") {
