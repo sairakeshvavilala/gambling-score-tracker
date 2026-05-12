@@ -889,32 +889,53 @@ tfoot td,
   }
 
   th, td {
-    padding: 6px 8px;
-    min-width: 80px;
-    width: max-content;
+    padding: 4px 2px;
+    min-width: 65px;
+    width: 65px;
+    font-size: 0.75rem;
+    text-align: center;
   }
 
   th:first-child, td:first-child {
-    min-width: 75px;
-    width: fit-content;
-    font-size: 0.75rem;
+    min-width: 60px;
+    width: 60px;
+    font-size: 0.7rem;
+    padding-left: 4px;
+    text-align: left;
+  }
+
+  .round-name {
+    font-size: 0.7rem;
   }
 
   .player-name {
-    font-size: 0.8rem;
-    justify-content: center;
+    font-size: 0.7rem;
+    line-height: 1.1;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .player-status {
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
+    gap: 2px;
   }
 
   .threshold-badge {
-    font-size: 0.55rem;
-    padding: 1px 6px;
-    min-height: 18px;
+    font-size: 0.5rem;
+    padding: 0 4px;
+    min-height: 14px;
+    border-radius: 4px;
+  }
+
+  .reentry-badge {
+    width: 16px;
+    height: 16px;
+    font-size: 0.5rem;
+  }
+
+  .score-value {
+    font-size: 0.85rem;
   }
 
   .tiny-button {
