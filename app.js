@@ -351,11 +351,16 @@ function buildGameRow(table, row) {
   labelCell.className = "round-label-cell";
   
   const labelText = document.createElement("span");
+  labelText.className = "round-name";
   labelText.textContent = row.label;
   labelCell.append(labelText);
 
   if (!table.isEnded) {
-    const editBtn = makeActionButton("Edit", "row-edit-btn", () => showRoundModal(table, row));
+    const editBtn = document.createElement("button");
+    editBtn.className = "row-edit-icon-btn";
+    editBtn.innerHTML = "✎";
+    editBtn.title = "Edit Round";
+    editBtn.addEventListener("click", () => showRoundModal(table, row));
     labelCell.append(editBtn);
   }
   

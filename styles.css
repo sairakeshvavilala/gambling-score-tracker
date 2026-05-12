@@ -430,15 +430,32 @@ button:disabled {
 
 .round-label-cell {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-direction: row;
+  gap: 8px;
   align-items: center;
+  justify-content: flex-start;
 }
 
-.row-edit-btn {
-  width: 100%;
-  padding: 4px 8px !important;
-  font-size: 0.65rem !important;
+.row-edit-icon-btn {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--gold);
+  font-size: 1rem;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.row-edit-icon-btn:hover {
+  opacity: 1;
+}
+
+.round-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 table {
@@ -872,17 +889,32 @@ tfoot td,
   }
 
   th, td {
-    padding: 8px;
-    min-width: 110px;
+    padding: 6px 8px;
+    min-width: 80px;
+    width: max-content;
   }
 
   th:first-child, td:first-child {
-    min-width: 90px;
-    font-size: 0.8rem;
+    min-width: 75px;
+    width: fit-content;
+    font-size: 0.75rem;
   }
 
   .player-name {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    justify-content: center;
+  }
+
+  .player-status {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .threshold-badge {
+    font-size: 0.55rem;
+    padding: 1px 6px;
+    min-height: 18px;
   }
 
   .tiny-button {
