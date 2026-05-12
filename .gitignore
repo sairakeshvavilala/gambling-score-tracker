@@ -1,0 +1,21 @@
+# Node / npm artifacts (if you ever add them)
+node_modules/
+package-lock.json
+npm-debug.log
+
+# OS / editor files
+.DS_Store
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Build / distribution artefacts
+dist/
+build/
+
+# Generated icons (you already have them in the repo, but keep the folder)
+icons/
+
+# Anything else you don’t want versioned
+*.log
