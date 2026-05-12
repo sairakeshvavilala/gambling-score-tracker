@@ -45,7 +45,7 @@ function makeTable() {
     id,
     title: `Game ${id}`,
     players: state.config.players.map(makePlayer),
-    rows: [makeGameRow(1)],
+    rows: [],
     historyRows: [],
     editingCell: null,
     betMoney: state.config.betMoney,
@@ -203,7 +203,7 @@ function renderTables() {
       </div>
       <div class="table-actions">
         <button class="ghost-button" type="button" data-action="end-game">${table.isEnded ? "Game Ended" : "End Game"}</button>
-        <button class="ghost-button" type="button" data-action="add-row">+ New Round</button>
+        <button class="ghost-button" type="button" data-action="add-row">+ Add Score</button>
       </div>
     </div>
     <div class="table-wrap"></div>
